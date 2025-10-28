@@ -1,5 +1,6 @@
-import { getAllBlogPosts, getPageContent } from "@/lib/content";
+import { getAllBlogPosts, getAllNewsItems, getPageContent } from "@/lib/content";
 import { dictionaries, resolveLocale } from "@/lib/i18n";
+import Image from "next/image";
 import Link from "next/link";
 
 interface HomePageProps {
@@ -13,6 +14,7 @@ export default async function HomePage({ params }: HomePageProps) {
 
   const home = await getPageContent("home", locale);
   const posts = await getAllBlogPosts(locale);
+  const newsItems = (await getAllNewsItems(locale)).slice(0, 3);
 
   const dateFormatter = new Intl.DateTimeFormat(locale === "ar" ? "ar" : "en", {
     dateStyle: "medium",
@@ -50,6 +52,56 @@ export default async function HomePage({ params }: HomePageProps) {
         <div className="flex flex-col gap-6">
           <div>
             <h2 className="text-2xl font-semibold tracking-tight text-[var(--color-text-primary)]">
+              {t.news.sectionTitle}
+            </h2>
+            <p className="text-[var(--color-text-secondary)]">{t.news.sectionDescription}</p>
+          </div>
+          {newsItems.length > 0 ? (
+            <ul className="grid gap-6 md:grid-cols-3">
+              {newsItems.map((item) => (
+                <li
+                  key={`${item.locale}-${item.slug}`}
+                  className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4 shadow-sm transition-colors"
+                >
+                  {item.image ? (
+                    <div className="relative mb-4 aspect-[16/9] overflow-hidden rounded-lg bg-[var(--color-page)]">
+                      <Image
+                        src={item.image}
+                        alt={item.imageAlt ?? item.title}
+                        fill
+                        sizes="(min-width: 1024px) 320px, (min-width: 768px) 45vw, 100vw"
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+                  ) : null}
+                  <div className="text-xs uppercase tracking-wide text-[var(--color-accent-soft)]">
+                    {dateFormatter.format(new Date(item.date))}
+                  </div>
+                  <h3 className="mt-2 text-lg font-semibold text-[var(--color-text-primary)]">{item.title}</h3>
+                  {item.summary ? (
+                    <p className="mt-2 text-sm text-[var(--color-text-secondary)]">{item.summary}</p>
+                  ) : null}
+                  {item.link ? (
+                    <Link
+                      href={item.link}
+                      className="mt-4 inline-flex text-sm font-semibold text-[var(--color-accent)] transition-colors hover:text-[var(--color-accent-hover)]"
+                      target={item.link.startsWith("http") ? "_blank" : undefined}
+                      rel={item.link.startsWith("http") ? "noopener noreferrer" : undefined}
+                    >
+                      {t.news.readMore}
+                    </Link>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-sm text-[var(--color-text-muted)]">{t.news.empty}</p>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-6">
+          <div>
+            <h2 className="text-2xl font-semibold tracking-tight text-[var(--color-text-primary)]">
               {t.home.latestPosts}
             </h2>
             <p className="text-[var(--color-text-secondary)]">{t.home.latestPostsDescription}</p>
@@ -58,17 +110,36 @@ export default async function HomePage({ params }: HomePageProps) {
             {posts.map((post) => (
               <li
                 key={post.slug}
-                className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-sm transition-colors"
+                className="overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] shadow-sm transition-colors"
               >
-                <div className="text-sm uppercase tracking-wide text-[var(--color-accent-soft)]">
-                  {dateFormatter.format(new Date(post.date))}
-                </div>
-                <h3 className="mt-2 text-xl font-semibold text-[var(--color-text-primary)]">
-                  <Link href={`/${locale}/blog/${post.slug}`}>{post.title}</Link>
-                </h3>
-                {post.description ? (
-                  <p className="mt-2 text-sm text-[var(--color-text-secondary)]">{post.description}</p>
+                {post.image ? (
+                  <div className="relative aspect-[16/9] bg-[var(--color-page)]">
+                    <Image
+                      src={post.image}
+                      alt={post.imageAlt ?? post.title}
+                      fill
+                      sizes="(min-width: 1024px) 280px, (min-width: 768px) 45vw, 100vw"
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
                 ) : null}
+                <div className="p-6">
+                  <div className="text-sm uppercase tracking-wide text-[var(--color-accent-soft)]">
+                    {dateFormatter.format(new Date(post.date))}
+                  </div>
+                  <h3 className="mt-2 text-xl font-semibold text-[var(--color-text-primary)]">
+                    <Link href={`/${locale}/blog/${post.slug}`}>{post.title}</Link>
+                  </h3>
+                  {post.description ? (
+                    <p className="mt-2 text-sm text-[var(--color-text-secondary)]">{post.description}</p>
+                  ) : null}
+                  <Link
+                    href={`/${locale}/blog/${post.slug}`}
+                    className="mt-4 inline-flex text-sm font-semibold text-[var(--color-accent)] transition-colors hover:text-[var(--color-accent-hover)]"
+                  >
+                    {t.blog.readArticle}
+                  </Link>
+                </div>
               </li>
             ))}
           </ul>

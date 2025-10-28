@@ -1,5 +1,6 @@
 import { getAllBlogPosts } from "@/lib/content";
 import { dictionaries, resolveLocale } from "@/lib/i18n";
+import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -40,23 +41,36 @@ export default async function BlogPage({ params }: BlogPageProps) {
           posts.map((post) => (
             <article
               key={post.slug}
-              className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-sm transition-colors"
+              className="overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] shadow-sm transition-colors"
             >
-              <time className="text-xs uppercase tracking-wide text-[var(--color-accent-soft)]">
-                {dateFormatter.format(new Date(post.date))}
-              </time>
-              <h2 className="mt-2 text-2xl font-semibold text-[var(--color-text-primary)]">
-                <Link href={`/${locale}/blog/${post.slug}`}>{post.title}</Link>
-              </h2>
-              {post.description ? (
-                <p className="mt-3 text-sm text-[var(--color-text-secondary)]">{post.description}</p>
+              {post.image ? (
+                <div className="relative aspect-[16/9] bg-[var(--color-page)]">
+                  <Image
+                    src={post.image}
+                    alt={post.imageAlt ?? post.title}
+                    fill
+                    sizes="(min-width: 1024px) 640px, 100vw"
+                    className="h-full w-full object-cover"
+                  />
+                </div>
               ) : null}
-              <Link
-                href={`/${locale}/blog/${post.slug}`}
-                className="mt-4 inline-flex text-sm font-semibold text-[var(--color-accent)] transition-colors hover:text-[var(--color-accent-hover)]"
-              >
-                {t.blog.readArticle}
-              </Link>
+              <div className="p-6">
+                <time className="text-xs uppercase tracking-wide text-[var(--color-accent-soft)]">
+                  {dateFormatter.format(new Date(post.date))}
+                </time>
+                <h2 className="mt-2 text-2xl font-semibold text-[var(--color-text-primary)]">
+                  <Link href={`/${locale}/blog/${post.slug}`}>{post.title}</Link>
+                </h2>
+                {post.description ? (
+                  <p className="mt-3 text-sm text-[var(--color-text-secondary)]">{post.description}</p>
+                ) : null}
+                <Link
+                  href={`/${locale}/blog/${post.slug}`}
+                  className="mt-4 inline-flex text-sm font-semibold text-[var(--color-accent)] transition-colors hover:text-[var(--color-accent-hover)]"
+                >
+                  {t.blog.readArticle}
+                </Link>
+              </div>
             </article>
           ))
         )}

@@ -51,10 +51,18 @@ interface FooterDictionary {
   builtWith: string;
 }
 
+interface NewsDictionary {
+  sectionTitle: string;
+  sectionDescription: string;
+  empty: string;
+  readMore: string;
+}
+
 interface Dictionary {
   nav: NavDictionary;
   home: HomeDictionary;
   blog: BlogDictionary;
+  news: NewsDictionary;
   footer: FooterDictionary;
 }
 
@@ -81,6 +89,12 @@ export const dictionaries: Record<Locale, Dictionary> = {
       readArticle: "Read article →",
       metaDescription: "Stories and updates managed through Decap CMS.",
     },
+    news: {
+      sectionTitle: "Latest news",
+      sectionDescription: "Company announcements, product updates, and upcoming events.",
+      empty: "No news items yet. Add one from the CMS to showcase your updates.",
+      readMore: "Read more",
+    },
     footer: {
       builtWith: "Built with Next.js + Decap CMS",
     },
@@ -106,6 +120,12 @@ export const dictionaries: Record<Locale, Dictionary> = {
       noPosts: "لا توجد مقالات بعد. أنشئ أول تدوينة من خلال لوحة تحكم Decap CMS.",
       readArticle: "اقرأ المقال →",
       metaDescription: "قصص وتحديثات تُدار عبر Decap CMS.",
+    },
+    news: {
+      sectionTitle: "آخر الأخبار",
+      sectionDescription: "إعلانات الشركة وتحديثات المنتجات والفعاليات القادمة.",
+      empty: "لا توجد أخبار بعد. أضف خبراً من خلال لوحة التحكم لعرض آخر المستجدات.",
+      readMore: "اقرأ المزيد",
     },
     footer: {
       builtWith: "تم بناؤه باستخدام Next.js وDecap CMS",

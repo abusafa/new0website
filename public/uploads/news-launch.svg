@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title">
+  <title>Product launch celebration</title>
+  <defs>
+    <linearGradient id="launch-bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#6366f1" />
+      <stop offset="1" stop-color="#f472b6" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#launch-bg)" rx="48" />
+  <g fill="#ffffff" opacity="0.9">
+    <path d="M478 198c0-39 31-70 70-70s70 31 70 70v150h-140z" />
+    <path d="M334 420h428l-54 96H388z" opacity="0.7" />
+  </g>
+  <g stroke="#ffffff" stroke-width="14" stroke-linecap="round">
+    <line x1="240" y1="140" x2="240" y2="180" opacity="0.7" />
+    <line x1="960" y1="210" x2="960" y2="240" opacity="0.7" />
+    <line x1="1040" y1="320" x2="1040" y2="360" opacity="0.7" />
+    <line x1="180" y1="340" x2="180" y2="380" opacity="0.7" />
+  </g>
+  <g fill="#fdf2f8" opacity="0.8">
+    <circle cx="960" cy="150" r="28" />
+    <circle cx="210" cy="420" r="40" />
+  </g>
+</svg>
