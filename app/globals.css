@@ -1,41 +1,67 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+  --color-page: #f4f4f5;
+  --color-surface: #ffffff;
+  --color-border: #e4e4e7;
+  --color-text-primary: #18181b;
+  --color-text-secondary: #52525b;
+  --color-text-muted: #71717a;
+  --color-accent: #4f46e5;
+  --color-accent-hover: #4338ca;
+  --color-accent-soft: #6366f1;
+  --color-code-bg: #f4f4f5;
+  --color-code-text: #27272a;
+  --color-pre-bg: #0f172a;
+  --color-pre-text: #f8fafc;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --color-page: #09090b;
+  --color-surface: #18181b;
+  --color-border: #27272a;
+  --color-text-primary: #f4f4f5;
+  --color-text-secondary: #d4d4d8;
+  --color-text-muted: #a1a1aa;
+  --color-accent: #818cf8;
+  --color-accent-hover: #a5b4fc;
+  --color-accent-soft: #a5b4fc;
+  --color-code-bg: #27272a;
+  --color-code-text: #e4e4e7;
+  --color-pre-bg: #18181b;
+  --color-pre-text: #e5e7eb;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  background: var(--color-page);
+  color: var(--color-text-primary);
+  font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+a {
+  color: inherit;
 }
 
 .markdown-content {
   display: grid;
   gap: 1.25rem;
-  color: #4b5563;
+  color: var(--color-text-secondary);
   font-size: 1.0625rem;
   line-height: 1.75;
+  transition: color 0.3s ease;
 }
 
 .markdown-content h2,
 .markdown-content h3 {
-  color: #0f172a;
+  color: var(--color-text-primary);
   font-weight: 600;
   line-height: 1.2;
   margin-top: 2.5rem;
@@ -65,16 +91,19 @@ body {
 }
 
 .markdown-content code {
-  background: #f4f4f5;
+  background: var(--color-code-bg);
   border-radius: 0.375rem;
+  color: var(--color-code-text);
   padding: 0.1rem 0.25rem;
   font-size: 0.95em;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .markdown-content pre {
-  background: #0f172a;
-  color: #f8fafc;
+  background: var(--color-pre-bg);
+  color: var(--color-pre-text);
   border-radius: 0.75rem;
   padding: 1rem;
   overflow-x: auto;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }

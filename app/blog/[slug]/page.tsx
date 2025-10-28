@@ -35,12 +35,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   return (
     <article className="mx-auto max-w-3xl px-6 py-16">
-      <time className="text-xs uppercase tracking-wide text-indigo-500">
+      <time className="text-xs uppercase tracking-wide text-[var(--color-accent-soft)]">
         {new Intl.DateTimeFormat("en", { dateStyle: "medium" }).format(new Date(post.date))}
       </time>
-      <h1 className="mt-3 text-4xl font-semibold tracking-tight text-zinc-900">{post.title}</h1>
+      <h1 className="mt-3 text-4xl font-semibold tracking-tight text-[var(--color-text-primary)]">{post.title}</h1>
       {post.description ? (
-        <p className="mt-3 text-lg text-zinc-600">{post.description}</p>
+        <p className="mt-3 text-lg text-[var(--color-text-secondary)]">{post.description}</p>
       ) : null}
       <div className="markdown-content mt-10" dangerouslySetInnerHTML={{ __html: post.body }} />
     </article>
