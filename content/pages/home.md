@@ -1,5 +1,5 @@
 ---
-title: Welcome to New0 Website
+title: Welcome to New0 Website 123
 tagline: Build fast sites with Next.js and Decap CMS
 ---
 
