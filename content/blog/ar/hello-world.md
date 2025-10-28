@@ -1,8 +1,8 @@
 ---
 title: مرحبًا من Decap CMS
-date: 2024-01-01T00:00:00Z
+date: 2024-01-01T00:00:00.000Z
 description: أول مقالة تجريبية تُدار من خلال Decap CMS.
-image: /uploads/blog-hello.svg
+image: /uploads/image001.jpg
 imageAlt: رسم توضيحي يعبر عن إطلاق مقالة جديدة.
 ---
 

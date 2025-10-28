@@ -65,6 +65,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             src={article.image}
             alt={article.imageAlt ?? article.title}
             fill
+            unoptimized
             sizes="(min-width: 1024px) 768px, 100vw"
             className="h-full w-full object-cover"
             priority

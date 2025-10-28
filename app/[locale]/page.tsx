@@ -69,6 +69,7 @@ export default async function HomePage({ params }: HomePageProps) {
                         src={item.image}
                         alt={item.imageAlt ?? item.title}
                         fill
+                        unoptimized
                         sizes="(min-width: 1024px) 320px, (min-width: 768px) 45vw, 100vw"
                         className="h-full w-full object-cover"
                       />
@@ -118,6 +119,7 @@ export default async function HomePage({ params }: HomePageProps) {
                       src={post.image}
                       alt={post.imageAlt ?? post.title}
                       fill
+                      unoptimized
                       sizes="(min-width: 1024px) 280px, (min-width: 768px) 45vw, 100vw"
                       className="h-full w-full object-cover"
                     />

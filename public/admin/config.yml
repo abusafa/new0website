@@ -55,7 +55,7 @@ collections:
       - { label: Title, name: title, widget: string }
       - { label: Publish Date, name: date, widget: datetime }
       - { label: Description, name: description, widget: text }
-      - { label: Featured Image, name: image, widget: image, choose_url: true, media_folder: "public/uploads", public_folder: "/uploads" }
+      - { label: Featured Image, name: image, widget: image, choose_url: true }
       - { label: Image Alt Text, name: imageAlt, widget: string, required: false }
       - { label: Body, name: body, widget: markdown }
   - name: blog_ar
@@ -67,7 +67,7 @@ collections:
       - { label: "العنوان", name: title, widget: string }
       - { label: "تاريخ النشر", name: date, widget: datetime }
       - { label: "الوصف", name: description, widget: text }
-      - { label: "الصورة البارزة", name: image, widget: image, choose_url: true, media_folder: "public/uploads", public_folder: "/uploads" }
+      - { label: "الصورة البارزة", name: image, widget: image, choose_url: true }
       - { label: "نص بديل للصورة", name: imageAlt, widget: string, required: false }
       - { label: "المحتوى", name: body, widget: markdown }
   - name: news_en
@@ -79,7 +79,7 @@ collections:
       - { label: Title, name: title, widget: string }
       - { label: Publish Date, name: date, widget: datetime }
       - { label: Summary, name: summary, widget: text }
-      - { label: Featured Image, name: image, widget: image, choose_url: true, media_folder: "public/uploads", public_folder: "/uploads" }
+      - { label: Featured Image, name: image, widget: image, choose_url: true }
       - { label: Image Alt Text, name: imageAlt, widget: string, required: false }
       - { label: Link, name: link, widget: string, required: false, hint: "Optional URL for the full story." }
   - name: news_ar
@@ -91,6 +91,6 @@ collections:
       - { label: "العنوان", name: title, widget: string }
       - { label: "تاريخ النشر", name: date, widget: datetime }
       - { label: "الملخص", name: summary, widget: text }
-      - { label: "الصورة البارزة", name: image, widget: image, choose_url: true, media_folder: "public/uploads", public_folder: "/uploads" }
+      - { label: "الصورة البارزة", name: image, widget: image, choose_url: true }
       - { label: "نص بديل للصورة", name: imageAlt, widget: string, required: false }
       - { label: "الرابط", name: link, widget: string, required: false, hint: "رابط اختياري للخبر الكامل." }

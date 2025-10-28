@@ -1,8 +1,8 @@
 ---
 title: Hello from Decap CMS
-date: 2024-01-01T00:00:00Z
+date: 2024-01-01T00:00:00.000Z
 description: First sample article managed through Decap CMS.
-image: /uploads/blog-hello.svg
+image: /uploads/image001.jpg
 imageAlt: Abstract illustration representing a blog post launch.
 ---
 
