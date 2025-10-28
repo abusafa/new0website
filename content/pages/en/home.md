@@ -11,4 +11,4 @@ This starter combines Next.js with a git-based CMS so you can publish content-ba
 - Manage site pages and blog posts in one place
 - Publish via git or the optional local backend for quick previews
 
-Get started by editing this page in `/admin` or by opening the markdown file under `content/pages/home.md`.
+Get started by editing this page in `/admin` or by opening the markdown file under `content/pages/en/home.md`.

@@ -1,11 +1,14 @@
+import { LanguageSwitcher } from "@/components/language-switcher";
 import { NetlifyIdentity } from "@/components/netlify-identity";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { defaultLocale, dictionaries, localeDirections, LOCALE_COOKIE, resolveLocale } from "@/lib/i18n";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
+import { cookies } from "next/headers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -48,13 +51,19 @@ export const metadata: Metadata = {
   description: "Starter website powered by Next.js and Decap CMS.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const cookieLocale = cookieStore.get(LOCALE_COOKIE)?.value ?? defaultLocale;
+  const locale = resolveLocale(cookieLocale);
+  const dir = localeDirections[locale];
+  const t = dictionaries[locale];
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} dir={dir} suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-[var(--color-page)] text-[var(--color-text-primary)] antialiased transition-colors`}
       >
@@ -66,25 +75,32 @@ export default function RootLayout({
             <header className="border-b border-[var(--color-border)] bg-[var(--color-surface)] transition-colors">
               <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
                 <Link
-                  href="/"
+                  href={`/${locale}`}
                   className="text-lg font-semibold tracking-tight text-[var(--color-text-primary)] transition-colors"
                 >
                   new0
                 </Link>
-                <nav className="flex items-center gap-4 text-sm font-medium text-[var(--color-text-secondary)]">
-                  <Link href="/about" className="transition-colors hover:text-[var(--color-accent)]">
-                    About
+                <nav className="flex items-center gap-3 text-sm font-medium text-[var(--color-text-secondary)]">
+                  <Link
+                    href={`/${locale}/about`}
+                    className="transition-colors hover:text-[var(--color-accent)]"
+                  >
+                    {t.nav.about}
                   </Link>
-                  <Link href="/blog" className="transition-colors hover:text-[var(--color-accent)]">
-                    Blog
+                  <Link
+                    href={`/${locale}/blog`}
+                    className="transition-colors hover:text-[var(--color-accent)]"
+                  >
+                    {t.nav.blog}
                   </Link>
                   <Link
                     href="/admin"
                     className="inline-flex items-center rounded-full border border-[var(--color-border)] px-4 py-1.5 text-sm font-semibold text-[var(--color-accent)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent-hover)]"
                   >
-                    CMS
+                    {t.nav.cms}
                   </Link>
-                  <ThemeToggle />
+                  <LanguageSwitcher locale={locale} />
+                  <ThemeToggle locale={locale} />
                 </nav>
               </div>
             </header>
@@ -92,7 +108,7 @@ export default function RootLayout({
             <footer className="border-t border-[var(--color-border)] bg-[var(--color-surface)] transition-colors">
               <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-6 py-6 text-sm text-[var(--color-text-muted)]">
                 <span>© {new Date().getFullYear()} new0</span>
-                <span>Built with Next.js + Decap CMS</span>
+                <span>{t.footer.builtWith}</span>
               </div>
             </footer>
           </div>

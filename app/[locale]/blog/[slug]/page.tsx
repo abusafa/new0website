@@ -1,18 +1,20 @@
 import { getBlogPost, getBlogPostSlugs } from "@/lib/content";
+import { locales, resolveLocale } from "@/lib/i18n";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 interface BlogPostPageProps {
-  params: { slug: string };
+  params: { locale: string; slug: string };
 }
 
 export async function generateStaticParams() {
   const slugs = await getBlogPostSlugs();
-  return slugs.map((slug) => ({ slug }));
+  return locales.flatMap((locale) => slugs.map((slug) => ({ locale, slug })));
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
-  const post = await getBlogPost(params.slug).catch(() => null);
+  const locale = resolveLocale(params?.locale);
+  const post = await getBlogPost(params.slug, locale).catch(() => null);
 
   if (!post) {
     return {
@@ -27,16 +29,21 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const post = await getBlogPost(params.slug).catch(() => null);
+  const locale = resolveLocale(params?.locale);
+  const post = await getBlogPost(params.slug, locale).catch(() => null);
 
   if (!post) {
     notFound();
   }
 
+  const formatter = new Intl.DateTimeFormat(locale === "ar" ? "ar" : "en", {
+    dateStyle: "medium",
+  });
+
   return (
     <article className="mx-auto max-w-3xl px-6 py-16">
       <time className="text-xs uppercase tracking-wide text-[var(--color-accent-soft)]">
-        {new Intl.DateTimeFormat("en", { dateStyle: "medium" }).format(new Date(post.date))}
+        {formatter.format(new Date(post.date))}
       </time>
       <h1 className="mt-3 text-4xl font-semibold tracking-tight text-[var(--color-text-primary)]">{post.title}</h1>
       {post.description ? (

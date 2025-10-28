@@ -4,7 +4,7 @@ date: 2024-01-01T00:00:00Z
 description: First sample article managed through Decap CMS.
 ---
 
-Welcome to your new content workflow. Blog entries live under `content/blog` and can be created, edited, and published directly from the CMS.
+Welcome to your new content workflow. Blog entries live under `content/blog/en` and can be created, edited, and published directly from the CMS.
 
 ```
 npm run dev

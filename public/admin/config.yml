@@ -8,28 +8,47 @@ media_folder: "public/uploads"
 public_folder: "/uploads"
 
 collections:
-  - name: pages
-    label: Pages
+  - name: pages_en
+    label: Pages (English)
     editor:
       preview: true
     files:
-      - file: "content/pages/home.md"
+      - file: "content/pages/en/home.md"
         label: Home Page
-        name: home
+        name: home_en
         fields:
           - { label: Title, name: title, widget: string }
           - { label: Tagline, name: tagline, widget: string, hint: "Short hero message." }
           - { label: Body, name: body, widget: markdown }
-      - file: "content/pages/about.md"
+      - file: "content/pages/en/about.md"
         label: About Page
-        name: about
+        name: about_en
         fields:
           - { label: Title, name: title, widget: string }
           - { label: Intro, name: intro, widget: text }
           - { label: Body, name: body, widget: markdown }
-  - name: blog
-    label: Blog Posts
-    folder: "content/blog"
+  - name: pages_ar
+    label: "صفحات (العربية)"
+    editor:
+      preview: true
+    files:
+      - file: "content/pages/ar/home.md"
+        label: "الصفحة الرئيسية"
+        name: home_ar
+        fields:
+          - { label: "العنوان", name: title, widget: string }
+          - { label: "السطر التعريفي", name: tagline, widget: string }
+          - { label: "المحتوى", name: body, widget: markdown }
+      - file: "content/pages/ar/about.md"
+        label: "صفحة نبذة عنا"
+        name: about_ar
+        fields:
+          - { label: "العنوان", name: title, widget: string }
+          - { label: "مقدمة", name: intro, widget: text }
+          - { label: "المحتوى", name: body, widget: markdown }
+  - name: blog_en
+    label: Blog Posts (English)
+    folder: "content/blog/en"
     create: true
     slug: "{{slug}}"
     fields:
@@ -37,3 +56,13 @@ collections:
       - { label: Publish Date, name: date, widget: datetime }
       - { label: Description, name: description, widget: text }
       - { label: Body, name: body, widget: markdown }
+  - name: blog_ar
+    label: "مقالات المدونة (العربية)"
+    folder: "content/blog/ar"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "العنوان", name: title, widget: string }
+      - { label: "تاريخ النشر", name: date, widget: datetime }
+      - { label: "الوصف", name: description, widget: text }
+      - { label: "المحتوى", name: body, widget: markdown }

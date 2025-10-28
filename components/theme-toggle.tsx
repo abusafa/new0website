@@ -1,12 +1,27 @@
 "use client";
 
 import { useTheme } from "@/components/theme-provider";
+import type { Locale } from "@/lib/i18n";
 
-export function ThemeToggle() {
+const labels: Record<Locale, { light: string; dark: string }> = {
+  en: {
+    light: "Switch to light theme",
+    dark: "Switch to dark theme",
+  },
+  ar: {
+    light: "التبديل إلى الوضع الفاتح",
+    dark: "التبديل إلى الوضع الداكن",
+  },
+};
+
+interface ThemeToggleProps {
+  locale: Locale;
+}
+
+export function ThemeToggle({ locale }: ThemeToggleProps) {
   const { theme, toggleTheme } = useTheme();
 
-  const nextTheme = theme === "dark" ? "light" : "dark";
-  const label = `Switch to ${nextTheme} theme`;
+  const label = theme === "dark" ? labels[locale].light : labels[locale].dark;
 
   return (
     <button
@@ -16,7 +31,7 @@ export function ThemeToggle() {
       aria-label={label}
       title={label}
     >
-      <span>{theme === "dark" ? "Dark" : "Light"}</span>
+      <span aria-hidden>{theme === "dark" ? "☾" : "☀"}</span>
     </button>
   );
 }
