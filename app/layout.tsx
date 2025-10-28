@@ -1,8 +1,10 @@
+import { NetlifyIdentity } from "@/components/netlify-identity";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -58,6 +60,8 @@ export default function RootLayout({
       >
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <ThemeProvider>
+          <Script src="https://identity.netlify.com/v1/netlify-identity-widget.js" strategy="afterInteractive" />
+          <NetlifyIdentity />
           <div className="flex min-h-screen flex-col">
             <header className="border-b border-[var(--color-border)] bg-[var(--color-surface)] transition-colors">
               <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
