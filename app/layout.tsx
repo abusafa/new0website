@@ -3,6 +3,7 @@ import { NetlifyIdentity } from "@/components/netlify-identity";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { defaultLocale, dictionaries, localeDirections, LOCALE_COOKIE, resolveLocale } from "@/lib/i18n";
+import { THEME_COOKIE, type Theme } from "@/components/theme-provider";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -24,22 +25,11 @@ const themeInitScript = `
 (function () {
   const storageKey = "new0:theme";
   const root = document.documentElement;
-
-  const setTheme = (value) => {
-    root.dataset.theme = value;
-    root.style.colorScheme = value;
-  };
+  const currentTheme = root.dataset.theme || "light";
 
   try {
-    const stored = window.localStorage.getItem(storageKey);
-    if (stored === "light" || stored === "dark") {
-      setTheme(stored);
-      return;
-    }
+    window.localStorage.setItem(storageKey, currentTheme);
   } catch (_) {}
-
-  const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-  setTheme(prefersDark ? "dark" : "light");
 })();
 `;
 
@@ -59,16 +49,18 @@ export default async function RootLayout({
   const cookieStore = await cookies();
   const cookieLocale = cookieStore.get(LOCALE_COOKIE)?.value ?? defaultLocale;
   const locale = resolveLocale(cookieLocale);
+  const cookieTheme = cookieStore.get(THEME_COOKIE)?.value as Theme | undefined;
+  const initialTheme: Theme = cookieTheme === "dark" ? "dark" : "light";
   const dir = localeDirections[locale];
   const t = dictionaries[locale];
 
   return (
-    <html lang={locale} dir={dir} suppressHydrationWarning>
+    <html lang={locale} dir={dir} data-theme={initialTheme} suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-[var(--color-page)] text-[var(--color-text-primary)] antialiased transition-colors`}
       >
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-        <ThemeProvider>
+        <ThemeProvider initialTheme={initialTheme}>
           <Script src="https://identity.netlify.com/v1/netlify-identity-widget.js" strategy="afterInteractive" />
           <NetlifyIdentity />
           <div className="flex min-h-screen flex-col">

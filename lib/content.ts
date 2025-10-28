@@ -14,8 +14,16 @@ async function markdownToHtml(markdown: string): Promise<string> {
   return processed.toString();
 }
 
-async function readMarkdownFile(baseDir: string, slug: string, locale: Locale) {
-  const attempts: Locale[] = locale === defaultLocale ? [locale] : [locale, defaultLocale];
+async function readMarkdownFile(
+  baseDir: string,
+  slug: string,
+  locale: Locale,
+  { fallbackToDefault = true }: { fallbackToDefault?: boolean } = {},
+) {
+  const attempts: Locale[] = [locale];
+  if (fallbackToDefault && locale !== defaultLocale) {
+    attempts.push(defaultLocale);
+  }
 
   for (const attempt of attempts) {
     const filepath = path.join(baseDir, attempt, `${slug}.md`);
@@ -23,13 +31,14 @@ async function readMarkdownFile(baseDir: string, slug: string, locale: Locale) {
       const file = await fs.readFile(filepath, "utf8");
       return { file, filepath, locale: attempt } as const;
     } catch (error) {
-      if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
-        throw error;
+      if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+        continue;
       }
+      throw error;
     }
   }
 
-  throw new Error(`Unable to find markdown file for slug "${slug}" in ${baseDir}`);
+  return null;
 }
 
 async function listMarkdownSlugs(dir: string, locale: Locale): Promise<string[]> {
@@ -56,7 +65,12 @@ export interface PageContent {
 
 export async function getPageContent(slug: string, localeInput?: string): Promise<PageContent> {
   const locale = resolveLocale(localeInput);
-  const { file, locale: resolvedLocale } = await readMarkdownFile(PAGE_DIR, slug, locale);
+  const result = await readMarkdownFile(PAGE_DIR, slug, locale);
+  if (!result) {
+    throw new Error(`Page content for "${slug}" not found for locale ${locale}`);
+  }
+
+  const { file, locale: resolvedLocale } = result;
 
   const { data, content } = matter(file);
   const htmlBody = await markdownToHtml(content);
@@ -97,9 +111,15 @@ export async function getBlogPostSlugs(localeInput?: string): Promise<string[]> 
   return Array.from(slugs);
 }
 
-export async function getBlogPost(slug: string, localeInput?: string): Promise<BlogPost> {
+export async function getBlogPost(slug: string, localeInput?: string): Promise<BlogPost | null> {
   const locale = resolveLocale(localeInput);
-  const { file, locale: resolvedLocale } = await readMarkdownFile(BLOG_DIR, slug, locale);
+  const result = await readMarkdownFile(BLOG_DIR, slug, locale, { fallbackToDefault: true });
+
+  if (!result) {
+    return null;
+  }
+
+  const { file, locale: resolvedLocale } = result;
 
   const { data, content } = matter(file);
   const htmlBody = await markdownToHtml(content);
@@ -125,6 +145,7 @@ export async function getAllBlogPosts(localeInput?: string): Promise<BlogSummary
   );
 
   return posts
+    .filter((post): post is BlogPost => post !== null)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .map(({ slug, title, description, date, locale: postLocale }) => ({
       slug,

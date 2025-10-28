@@ -3,8 +3,13 @@ import { locales, resolveLocale } from "@/lib/i18n";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+interface BlogPostPageParams {
+  locale: string;
+  slug: string;
+}
+
 interface BlogPostPageProps {
-  params: { locale: string; slug: string };
+  params: BlogPostPageParams | Promise<BlogPostPageParams>;
 }
 
 export async function generateStaticParams() {
@@ -13,8 +18,9 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
-  const locale = resolveLocale(params?.locale);
-  const post = await getBlogPost(params.slug, locale).catch(() => null);
+  const resolvedParams = await Promise.resolve(params);
+  const locale = resolveLocale(resolvedParams?.locale);
+  const post = await getBlogPost(resolvedParams.slug, locale).catch(() => null);
 
   if (!post) {
     return {
@@ -29,8 +35,9 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const locale = resolveLocale(params?.locale);
-  const post = await getBlogPost(params.slug, locale).catch(() => null);
+  const resolvedParams = await Promise.resolve(params);
+  const locale = resolveLocale(resolvedParams?.locale);
+  const post = await getBlogPost(resolvedParams.slug, locale).catch(() => null);
 
   if (!post) {
     notFound();

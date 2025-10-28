@@ -4,11 +4,12 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 interface BlogPageProps {
-  params: { locale: string };
+  params: { locale: string } | Promise<{ locale: string }>;
 }
 
 export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
-  const locale = resolveLocale(params?.locale);
+  const resolvedParams = await Promise.resolve(params);
+  const locale = resolveLocale(resolvedParams?.locale);
   const t = dictionaries[locale];
   return {
     title: t.nav.blog,
@@ -17,7 +18,8 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
 }
 
 export default async function BlogPage({ params }: BlogPageProps) {
-  const locale = resolveLocale(params?.locale);
+  const resolvedParams = await Promise.resolve(params);
+  const locale = resolveLocale(resolvedParams?.locale);
   const t = dictionaries[locale];
   const posts = await getAllBlogPosts(locale);
 

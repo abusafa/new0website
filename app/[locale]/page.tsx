@@ -3,13 +3,12 @@ import { dictionaries, resolveLocale } from "@/lib/i18n";
 import Link from "next/link";
 
 interface HomePageProps {
-  params: {
-    locale: string;
-  };
+  params: { locale: string } | Promise<{ locale: string }>;
 }
 
 export default async function HomePage({ params }: HomePageProps) {
-  const locale = resolveLocale(params?.locale);
+  const resolvedParams = await Promise.resolve(params);
+  const locale = resolveLocale(resolvedParams?.locale);
   const t = dictionaries[locale];
 
   const home = await getPageContent("home", locale);

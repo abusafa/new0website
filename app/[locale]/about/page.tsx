@@ -3,18 +3,20 @@ import { dictionaries, resolveLocale } from "@/lib/i18n";
 import type { Metadata } from "next";
 
 interface AboutPageProps {
-  params: { locale: string };
+  params: { locale: string } | Promise<{ locale: string }>;
 }
 
 export async function generateMetadata({ params }: AboutPageProps): Promise<Metadata> {
-  const locale = resolveLocale(params?.locale);
+  const resolvedParams = await Promise.resolve(params);
+  const locale = resolveLocale(resolvedParams?.locale);
   return {
     title: dictionaries[locale].nav.about,
   } satisfies Metadata;
 }
 
 export default async function AboutPage({ params }: AboutPageProps) {
-  const locale = resolveLocale(params?.locale);
+  const resolvedParams = await Promise.resolve(params);
+  const locale = resolveLocale(resolvedParams?.locale);
   const page = await getPageContent("about", locale);
 
   return (

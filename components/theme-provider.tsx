@@ -10,7 +10,7 @@ import {
   type ReactNode,
 } from "react";
 
-type Theme = "light" | "dark";
+export type Theme = "light" | "dark";
 
 interface ThemeContextValue {
   theme: Theme;
@@ -21,48 +21,7 @@ interface ThemeContextValue {
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 const STORAGE_KEY = "new0:theme";
-
-const readStoredTheme = (): Theme | null => {
-  if (typeof window === "undefined") {
-    return null;
-  }
-
-  try {
-    const stored = window.localStorage.getItem(STORAGE_KEY);
-    if (stored === "light" || stored === "dark") {
-      return stored;
-    }
-  } catch {
-    // ignore storage access issues (private mode, etc.)
-  }
-
-  return null;
-};
-
-const resolvePreferredTheme = (): Theme => {
-  const stored = readStoredTheme();
-  if (stored) {
-    return stored;
-  }
-
-  if (typeof window !== "undefined" && typeof window.matchMedia === "function") {
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    return prefersDark ? "dark" : "light";
-  }
-
-  return "light";
-};
-
-const resolveInitialTheme = (): Theme => {
-  if (typeof document !== "undefined") {
-    const current = document.documentElement.dataset.theme;
-    if (current === "light" || current === "dark") {
-      return current;
-    }
-  }
-
-  return resolvePreferredTheme();
-};
+export const THEME_COOKIE = "new0:theme";
 
 const applyTheme = (value: Theme) => {
   if (typeof document === "undefined") {
@@ -74,8 +33,8 @@ const applyTheme = (value: Theme) => {
   root.style.colorScheme = value;
 };
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>(() => resolveInitialTheme());
+export function ThemeProvider({ children, initialTheme }: { children: ReactNode; initialTheme: Theme }) {
+  const [theme, setThemeState] = useState<Theme>(initialTheme);
 
   useEffect(() => {
     applyTheme(theme);
@@ -86,6 +45,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       } catch {
         // swallow write errors when storage is unavailable
       }
+    }
+
+    try {
+      document.cookie = `${THEME_COOKIE}=${theme}; path=/; max-age=31536000`;
+    } catch {
+      // ignore cookie failures
     }
   }, [theme]);
 
